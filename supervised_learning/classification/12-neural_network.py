@@ -99,3 +99,4 @@ class NeuralNetwork:
         """
         self.forward_prop(X)
         return np.where(self.__A2 >= 0.5, 1, 0), self.cost(Y, self.__A2)
+    

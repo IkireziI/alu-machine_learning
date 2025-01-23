@@ -14,7 +14,7 @@ class Neuron:
         """ Instantiation function of the neuron
 
         Args:
-            nx (int): number of features to be initialized
+            nx (_type_): _description_
 
         Raises:
             TypeError: _description_
@@ -74,35 +74,4 @@ class Neuron:
         loss = - (Y * np.log(A) + (1 - Y) * np.log(1.0000001 - A))
         cost = np.mean(loss)
         return cost
-
-    def evaluate(self, X, Y):
-        """ Evaluate the cost function
-
-        Args:
-            X (_type_): _description_
-            Y (_type_): _description_
-
-        Returns:
-            _type_: _description_
-        """
-        pred = self.forward_prop(X)
-        cost = self.cost(Y, pred)
-        pred = np.where(pred > 0.5, 1, 0)
-        return (pred, cost)
-
-    def gradient_descent(self, X, Y, A, alpha=0.05):
-        """ Calculate one pass of gradient descent on the neuron
-
-        Args:
-            X (_type_): _description_
-            Y (_type_): _description_
-            A (_type_): _description_
-            alpha (float, optional): _description_. Defaults to 0.05.
-        """
-        dz = A - Y
-        m = X.shape[1]
-        dw = (1/m) * np.matmul(dz, X.T)
-        db = np.mean(dz)
-        self.__W -= alpha * dw
-        self.__b -= alpha * db
-        
+    

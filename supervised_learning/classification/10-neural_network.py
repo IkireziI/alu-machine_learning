@@ -78,3 +78,4 @@ class NeuralNetwork:
         sigmoid = 1 / (1 + np.exp(-z))
         self.__A2 = sigmoid
         return self.__A1, self.__A2
+    

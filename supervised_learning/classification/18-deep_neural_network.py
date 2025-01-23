@@ -84,3 +84,4 @@ class DeepNeuralNetwork:
             # store output to the cache
             self.cache["A"+str(i)] = sigmoid
         return self.cache["A"+str(i)], self.cache
+    

@@ -63,3 +63,4 @@ class DeepNeuralNetwork:
     def weights(self):
         """Return weights and bias dictionary"""
         return self.__weights
+    

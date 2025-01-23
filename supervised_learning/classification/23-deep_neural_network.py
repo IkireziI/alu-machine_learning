@@ -190,3 +190,4 @@ class DeepNeuralNetwork:
             plt.title('Training Cost')
             plt.show()
         return self.evaluate(X, Y)
+    

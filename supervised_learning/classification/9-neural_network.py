@@ -64,3 +64,4 @@ class NeuralNetwork:
     def A2(self):
         """Return activated output for output neuron"""
         return self.__A2
+    

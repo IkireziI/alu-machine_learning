@@ -173,3 +173,4 @@ class DeepNeuralNetwork:
             self.forward_prop(X)
             self.gradient_descent(Y, self.cache, alpha)
         return self.evaluate(X, Y)
+    

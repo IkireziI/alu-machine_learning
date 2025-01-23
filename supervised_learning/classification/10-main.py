@@ -17,3 +17,4 @@ if A1 is nn.A1:
         print(A1)
 if A2 is nn.A2:
         print(A2)
+        

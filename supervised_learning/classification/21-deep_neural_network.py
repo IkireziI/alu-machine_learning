@@ -141,3 +141,4 @@ class DeepNeuralNetwork:
             da = np.matmul(W.T, dz)
             self.__weights["W" + str(i)] -= alpha * dw
             self.__weights["b" + str(i)] -= alpha * db
+            
