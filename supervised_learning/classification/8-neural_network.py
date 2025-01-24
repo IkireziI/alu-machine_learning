@@ -15,7 +15,7 @@ class NeuralNetwork:
 
         Args:
             nx (int): size of the input layer
-            nodes (_type_): _description_
+            nodes (int): number of nodes in the hidden layer
         """
         if not isinstance(nx, int):
             raise TypeError('nx must be an integer')
@@ -33,4 +33,3 @@ class NeuralNetwork:
         self.W2 = np.random.randn(1, nodes)
         self.b2 = 0
         self.A2 = 0
-     
