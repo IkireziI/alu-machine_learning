@@ -34,7 +34,7 @@ class NeuralNetwork:
         self.__b2 = 0
         self.__A2 = 0
 
-    # getter functions
+    # Getter functions
     @property
     def W1(self):
         """Return weights vector for hidden layer"""
