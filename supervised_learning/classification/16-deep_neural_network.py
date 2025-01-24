@@ -47,4 +47,3 @@ class DeepNeuralNetwork:
 
             # Zero initialization
             self.weights['b' + str(i + 1)] = np.zeros((layers[i], 1))
-            
