@@ -15,7 +15,7 @@ class NeuralNetwork:
 
         Args:
             nx (int): size of the input layer
-            nodes (_type_): _description_
+            nodes (int): number of nodes in the hidden layer
         """
         if not isinstance(nx, int):
             raise TypeError('nx must be an integer')
@@ -66,27 +66,30 @@ class NeuralNetwork:
         return self.__A2
 
     def forward_prop(self, X):
-        """ Calculates the forward propagation of the neural network
+        """Calculates the forward propagation of the neural network
 
         Args:
-            X (numpy.array): Input data with shape (nx, m)
+            X (numpy.ndarray): Input data with shape (nx, m)
+
+        Returns:
+            tuple: The activated outputs for the hidden layer and output layer
         """
         z = np.matmul(self.__W1, X) + self.__b1
-        sigmoid = 1 / (1 + np.exp(-z))
-        self.__A1 = sigmoid
+        self.__A1 = 1 / (1 + np.exp(-z))  # Sigmoid activation for the hidden layer
         z = np.matmul(self.__W2, self.__A1) + self.__b2
-        sigmoid = 1 / (1 + np.exp(-z))
-        self.__A2 = sigmoid
+        self.__A2 = 1 / (1 + np.exp(-z))  # Sigmoid activation for the output layer
         return self.__A1, self.__A2
 
     def cost(self, Y, A):
-        """ Calculates the cost of the model using logistic regression
+        """Calculates the cost of the model using logistic regression
 
         Args:
-            Y (_type_): _description_
-            A (_type_): _description_
+            Y (numpy.ndarray): True labels
+            A (numpy.ndarray): Predictions
+
+        Returns:
+            float: The cost function
         """
-        loss = - (Y * np.log(A) + (1 - Y) * np.log(1.0000001 - A))
-        cost = np.mean(loss)
+        loss = - (Y * np.log(A) + (1 - Y) * np.log(1.0000001 - A))  # Logistic loss
+        cost = np.mean(loss)  # Mean loss for cost
         return cost
-    
