@@ -15,7 +15,7 @@ class NeuralNetwork:
 
         Args:
             nx (int): size of the input layer
-            nodes (int): number of nodes in the hidden layer
+            nodes (_type_): _description_
         """
         if not isinstance(nx, int):
             raise TypeError('nx must be an integer')
@@ -34,7 +34,7 @@ class NeuralNetwork:
         self.__b2 = 0
         self.__A2 = 0
 
-    # Getter functions
+    # getter functions
     @property
     def W1(self):
         """Return weights vector for hidden layer"""
@@ -66,30 +66,26 @@ class NeuralNetwork:
         return self.__A2
 
     def forward_prop(self, X):
-        """Calculates the forward propagation of the neural network
+        """ Calculates the forward propagation of the neural network
 
         Args:
-            X (numpy.ndarray): Input data with shape (nx, m)
-
-        Returns:
-            tuple: The activated outputs for the hidden layer and output layer
+            X (numpy.array): Input data with shape (nx, m)
         """
         z = np.matmul(self.__W1, X) + self.__b1
-        self.__A1 = 1 / (1 + np.exp(-z))  # Sigmoid activation for the hidden layer
+        sigmoid = 1 / (1 + np.exp(-z))
+        self.__A1 = sigmoid
         z = np.matmul(self.__W2, self.__A1) + self.__b2
-        self.__A2 = 1 / (1 + np.exp(-z))  # Sigmoid activation for the output layer
+        sigmoid = 1 / (1 + np.exp(-z))
+        self.__A2 = sigmoid
         return self.__A1, self.__A2
 
     def cost(self, Y, A):
-        """Calculates the cost of the model using logistic regression
+        """ Calculates the cost of the model using logistic regression
 
         Args:
-            Y (numpy.ndarray): True labels
-            A (numpy.ndarray): Predictions
-
-        Returns:
-            float: The cost function
+            Y (_type_): _description_
+            A (_type_): _description_
         """
-        loss = - (Y * np.log(A) + (1 - Y) * np.log(1.0000001 - A))  # Logistic loss
-        cost = np.mean(loss)  # Mean loss for cost
+        loss = - (Y * np.log(A) + (1 - Y) * np.log(1.0000001 - A))
+        cost = np.mean(loss)
         return cost
