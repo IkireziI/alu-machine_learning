@@ -113,4 +113,3 @@ class DeepNeuralNetwork:
         # get output of the neural network from the cache
         output = self.cache.get("A" + str(self.L))
         return np.where(output >= 0.5, 1, 0), self.cost(Y, output)
-    
