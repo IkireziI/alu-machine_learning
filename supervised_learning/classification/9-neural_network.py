@@ -15,7 +15,7 @@ class NeuralNetwork:
 
         Args:
             nx (int): size of the input layer
-            nodes (_type_): _description_
+            nodes (int): number of nodes in the hidden layer
         """
         if not isinstance(nx, int):
             raise TypeError('nx must be an integer')
@@ -64,4 +64,3 @@ class NeuralNetwork:
     def A2(self):
         """Return activated output for output neuron"""
         return self.__A2
-    
