@@ -30,7 +30,7 @@ class Neuron:
         self.__b = 0
         self.__A = 0
 
-        # getter function
+    # getter function
     @property
     def W(self):
         """Return weights"""
@@ -61,11 +61,11 @@ class Neuron:
         return self.__A
 
     def cost(self, Y, A):
-        """ Compute the of the model using logistic regression
+        """ Compute the cost of the model using logistic regression
 
         Args:
             Y (np.array): True values
-            A (np.array): Prediction valuesss
+            A (np.array): Prediction values
 
         Returns:
             float: cost function
@@ -105,4 +105,3 @@ class Neuron:
         db = np.mean(dz)
         self.__W -= alpha * dw
         self.__b -= alpha * db
-        
