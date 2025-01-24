@@ -30,7 +30,7 @@ class Neuron:
         self.__b = 0
         self.__A = 0
 
-        # getter function
+    # getter function
     @property
     def W(self):
         """Return weights"""
@@ -45,4 +45,3 @@ class Neuron:
     def A(self):
         """Return output"""
         return self.__A
-    
