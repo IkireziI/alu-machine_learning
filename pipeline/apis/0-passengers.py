@@ -21,10 +21,11 @@ def availableShips(passengerCount):
         response = requests.get(url)
         if response.status_code != 200:
             break  # Stop if request fails
-        
+
         data = response.json()
         for ship in data['results']:
-            passengers = ship['passengers'].replace(',', '')  # Remove commas in numbers
+            passengers = ship['passengers'].replace(',', '')  # Remove commas
+
             try:
                 if int(passengers) >= passengerCount:
                     output.append(ship['name'])
