@@ -1,41 +1,30 @@
 #!/usr/bin/env python3
-"""Return list of ships"""
-
+"""
+By using the Swapi API, create a method that returns
+the list of ships that can hold a given number of passengers
+"""
 import requests
 
 
 def availableShips(passengerCount):
-    """Return list of ships
-
-    Args:
-        passengerCount (int): Minimum number of passengers required.
-    
-    Returns:
-        list: Names of ships that can carry at least `passengerCount` passengers.
     """
-
-    url = 'https://swapi-api.alx-tools.com/api/starships'
-    output = []
-
+    returns the list of ships that can hold a given number of passengers
+    If the list is empty, the method should return an empty list
+    """
+    url = "https://swapi-api.alx-tools.com/api/starships/"
+    ships = []
     while url:
         response = requests.get(url)
-        if response.status_code != 200:
-            break  # Stop if request fails
-
         data = response.json()
         for ship in data['results']:
-            passengers = ship['passengers'].replace(',', '')  # Remove commas
-
-            try:
-                if int(passengers) >= passengerCount:
-                    output.append(ship['name'])
-            except ValueError:
-                pass  # Skip ships with "unknown" passenger counts
-
-        url = data.get('next')  # Get next page URL, if available
-
-    return output
-
-
-# Example usage:
-# print(availableShips(100))
+            if (
+                ship["passengers"] != "n/a"
+                and ship["passengers"] != "unknown"
+                and ship["passengers"] != "0"
+                and ship["passengers"] != "none"
+            ):
+                ship["passengers"] = ship["passengers"].replace(",", "")
+                if int(ship["passengers"]) >= passengerCount:
+                    ships.append(ship["name"])
+        url = data["next"]
+    return ships
