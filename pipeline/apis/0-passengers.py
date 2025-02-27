@@ -1,31 +1,40 @@
 #!/usr/bin/env python3
-""" Return list of ships"""
-
+"""Return list of ships"""
 
 import requests
 
 
 def availableShips(passengerCount):
-    """ Return list of ships
+    """Return list of ships
 
     Args:
-        passengerCount (int): number of ships
+        passengerCount (int): Minimum number of passengers required.
+    
+    Returns:
+        list: Names of ships that can carry at least `passengerCount` passengers.
     """
 
-    res = requests.get('https://swapi-api.alx-tools.com/api/starships')
-
+    url = 'https://swapi-api.alx-tools.com/api/starships'
     output = []
-    while res.status_code == 200:
-        res = res.json()
-        for ship in res['results']:
-            passengers = ship['passengers'].replace(',', '')
+
+    while url:
+        response = requests.get(url)
+        if response.status_code != 200:
+            break  # Stop if request fails
+        
+        data = response.json()
+        for ship in data['results']:
+            passengers = ship['passengers'].replace(',', '')  # Remove commas in numbers
             try:
                 if int(passengers) >= passengerCount:
                     output.append(ship['name'])
             except ValueError:
-                pass
-        try:
-            res = requests.get(res['next'])
-        except Exception:
-            break
+                pass  # Skip ships with "unknown" passenger counts
+
+        url = data.get('next')  # Get next page URL, if available
+
     return output
+
+
+# Example usage:
+# print(availableShips(100))
