@@ -29,3 +29,4 @@ if __name__ == '__main__':
     for method, count in method_counts.items():
         print(f"\tmethod {method}: {count}")
     print(f"{status_check_count} status check")
+    
