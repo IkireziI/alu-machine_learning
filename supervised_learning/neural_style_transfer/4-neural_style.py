@@ -240,3 +240,4 @@ class NST:
         gram_style = self.gram_matrix(style_output)
         diff = tf.reduce_mean(tf.square(gram_style - gram_target))
         return diff
+    

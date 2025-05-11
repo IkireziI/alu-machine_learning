@@ -184,3 +184,4 @@ class NST:
         gram = tf.expand_dims(gram, axis=0)
         gram /= tf.cast(product, tf.float32)
         return (gram)
+    
