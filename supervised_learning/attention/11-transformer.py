@@ -120,4 +120,3 @@ class Transformer(tf.keras.layers.Layer):
                                       look_ahead_mask, decoder_mask)
         final_output = self.linear(decoder_output)
         return final_output
-    
