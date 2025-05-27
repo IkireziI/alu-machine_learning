@@ -126,5 +126,5 @@ class Decoder(tf.keras.layers.Layer):
 
         for i in range(self.N):
             x = self.blocks[i](x, encoder_output, training,
-                             look_ahead_mask, padding_mask)
-        return x    
+                               look_ahead_mask, padding_mask)
+        return x
