@@ -99,5 +99,5 @@ class EncoderBlock(tf.keras.layers.Layer):
         ffn_output = self.dropout2(ffn_output, training=training)
         output2 = self.layernorm2(output1 + ffn_output)
 
-        return output2
-    
+        return output2  
+   
