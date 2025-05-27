@@ -100,3 +100,4 @@ class RNNDecoder(tf.keras.layers.Layer):
         y = tf.reshape(y, (-1, y.shape[2]))
         y = self.F(y)
         return y, s
+    

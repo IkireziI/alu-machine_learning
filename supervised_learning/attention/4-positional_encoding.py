@@ -40,3 +40,4 @@ def positional_encoding(max_seq_len, dm):
             # cos for odd indices of positional_encoding
             positional_encoding[pos, i + 1] = np.cos(get_angle(pos, i, dm))
     return positional_encoding
+    
