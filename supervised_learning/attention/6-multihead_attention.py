@@ -96,7 +96,6 @@ class MultiHeadAttention(tf.keras.layers.Layer):
                         (..., h, seq_len_q, seq_len_v)]:
                     contains the attention weights
         """
-        # batch = Q.get_shape().as_list()[0]
         batch = tf.shape(Q)[0]
 
         q = self.Wq(Q)
@@ -113,5 +112,4 @@ class MultiHeadAttention(tf.keras.layers.Layer):
         concat_attention = tf.reshape(attention, (batch, -1, self.dm))
         outputs = self.linear(concat_attention)
 
-        return outputs, weights  
-        
+        return outputs, weights
