@@ -113,5 +113,5 @@ class MultiHeadAttention(tf.keras.layers.Layer):
         concat_attention = tf.reshape(attention, (batch, -1, self.dm))
         outputs = self.linear(concat_attention)
 
-        return outputs, weights    
-    
+        return outputs, weights  
+        
