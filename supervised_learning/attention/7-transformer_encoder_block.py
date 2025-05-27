@@ -4,7 +4,6 @@ Defines a class that inherits from tensorflow.keras.layers.Layer
 to create an encoder block for a transformer
 """
 
-
 import tensorflow as tf
 MultiHeadAttention = __import__('6-multihead_attention').MultiHeadAttention
 
@@ -99,5 +98,4 @@ class EncoderBlock(tf.keras.layers.Layer):
         ffn_output = self.dropout2(ffn_output, training=training)
         output2 = self.layernorm2(output1 + ffn_output)
 
-        return output2  
-   
+        return output2
