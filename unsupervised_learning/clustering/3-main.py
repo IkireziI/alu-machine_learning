@@ -27,7 +27,7 @@ if __name__ == "__main__":
     plt.title('Optimizing K-Means')
     plt.show()
 
-    # If you want, you can compute variance for a particular number of clusters:
+    # If you want to compute variance with clusters:
     k = 5
     C, _ = kmeans(X, k)
     print("Variance with {} clusters: {:.5f}".format(k, variance(X, C)))
