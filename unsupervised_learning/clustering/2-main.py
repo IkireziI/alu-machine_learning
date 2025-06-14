@@ -15,5 +15,6 @@ if __name__ == "__main__":
     np.random.shuffle(X)
 
     for k in range(1, 11):
-        C, _ = kmeans(X, k)
-        print('Variance with {} clusters: {}'.format(k, variance(X, C).round(5)))
+        C, clss = kmeans(X, k)
+        var = variance(X, C, clss)
+        print(f'Variance with {k} clusters: {var.round(5)}')
