@@ -1,8 +1,10 @@
-#!/usr/bin/env python3
+#! /usr/bin/env python3
 
 import numpy as np
 import matplotlib.pyplot as plt
 optimum_k = __import__('3-optimum').optimum_k
+kmeans = __import__('1-kmeans').kmeans
+variance = __import__('2-variance').variance
 
 if __name__ == "__main__":
     np.random.seed(0)
@@ -17,9 +19,15 @@ if __name__ == "__main__":
     results, d_vars = optimum_k(X, kmax=10)
     print(results)
     print(np.round(d_vars, 5))
+
+    # Plotting the variance drop (elbow method)
     plt.scatter(list(range(1, 11)), d_vars)
     plt.xlabel('Clusters')
     plt.ylabel('Delta Variance')
-    plt.title('Optimizing K-means')
+    plt.title('Optimizing K-Means')
     plt.show()
-    
+
+    # If you want, you can compute variance for a particular number of clusters:
+    k = 5
+    C, _ = kmeans(X, k)
+    print("Variance with {} clusters: {:.5f}".format(k, variance(X, C)))
