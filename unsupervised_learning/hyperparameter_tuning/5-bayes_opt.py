@@ -75,8 +75,8 @@ class BayesianOptimization:
         for _ in range(iterations):
             X_next, _ = self.acquisition()
 
-            # Fix: correct way to check if a row already exists in self.gp.X
-            if any(np.allclose(X_next, x) for x in self.gp.X):
+            # Fix: avoid updating with duplicates
+            if np.any(np.all(np.isclose(self.gp.X, X_next, atol=1e-8), axis=1)):
                 break
 
             Y = self.f(X_next)
