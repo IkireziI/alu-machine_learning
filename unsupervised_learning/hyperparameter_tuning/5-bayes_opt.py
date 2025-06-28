@@ -20,8 +20,8 @@ class BayesianOptimization():
         """
         self.f = f
         self.gp = GP(X_init, Y_init, l, sigma_f)
-        min, max = bounds
-        X_s = np.linspace(min, max, ac_samples)
+        min_, max_ = bounds
+        X_s = np.linspace(min_, max_, ac_samples)
         self.X_s = (np.sort(X_s)).reshape(-1, 1)
         self.xsi = xsi
         self.minimize = minimize
@@ -40,7 +40,6 @@ class BayesianOptimization():
         if self.minimize is True:
             optimize = np.amin(self.gp.Y)
             imp = optimize - mu - self.xsi
-
         else:
             optimize = np.amax(self.gp.Y)
             imp = mu - optimize - self.xsi
@@ -74,7 +73,7 @@ class BayesianOptimization():
             x_opt, _ = self.acquisition()
             # If the next proposed point is one that has already been sampled,
             # optimization should be stopped early
-            if x_opt in X_all_s:
+            if any(np.allclose(x_opt, x_prev, atol=1e-8) for x_prev in X_all_s):
                 break
 
             y_opt = self.f(x_opt)
@@ -89,10 +88,10 @@ class BayesianOptimization():
         else:
             index = np.argmax(self.gp.Y)
 
-        self.gp.X = self.gp.X[:-1]
+        # Commenting out this line to prevent accidental data loss
+        # self.gp.X = self.gp.X[:-1]
 
         x_opt = self.gp.X[index]
         y_opt = self.gp.Y[index]
 
         return x_opt, y_opt
-    
