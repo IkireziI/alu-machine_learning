@@ -36,15 +36,15 @@ def autoencoder(input_dims, hidden_layers, latent_dims):
         raise TypeError(
             "input_dims must be an int containing dimensions of model input")
     if type(hidden_layers) is not list:
-        raise TypeError("hidden_layers must be a list of ints \
-        representing number of nodes for each layer")
+        raise TypeError("hidden_layers must be a list of ints "
+                        "representing number of nodes for each layer")
     for nodes in hidden_layers:
         if type(nodes) is not int:
-            raise TypeError("hidden_layers must be a list of ints \
-            representing number of nodes for each layer")
+            raise TypeError("hidden_layers must be a list of ints "
+                            "representing number of nodes for each layer")
     if type(latent_dims) is not int:
-        raise TypeError("latent_dims must be an int containing dimensions of \
-        latent space representation")
+        raise TypeError("latent_dims must be an int containing dimensions of "
+                        "latent space representation")
 
     # encoder
     encoder_inputs = keras.Input(shape=(input_dims,))
