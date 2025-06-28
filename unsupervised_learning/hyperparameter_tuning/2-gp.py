@@ -14,9 +14,14 @@ class GaussianProcess:
 
     def __init__(self, X_init, Y_init, l=1, sigma_f=1):
         """
-        A function that initializes a noiseless 1D Gaussian process
-        """
+        Initializes a noiseless 1D Gaussian process
 
+        Parameters:
+        - X_init: numpy.ndarray of shape (t, 1), the inputs
+        - Y_init: numpy.ndarray of shape (t, 1), the outputs
+        - l: length scale parameter
+        - sigma_f: output scale parameter
+        """
         self.X = X_init
         self.Y = Y_init
         self.l = l
@@ -25,26 +30,31 @@ class GaussianProcess:
 
     def kernel(self, X1, X2):
         """
-        calculates the covariance kernel matrix between two matrices
-        """
+        Calculates the covariance kernel matrix between two matrices
 
+        Parameters:
+        - X1: numpy.ndarray of shape (m, 1)
+        - X2: numpy.ndarray of shape (n, 1)
+
+        Returns:
+        - Covariance matrix of shape (m, n)
+        """
         sqdist = np.sum(X1**2, 1).reshape(-1, 1) + np.sum(
             X2**2, 1) - 2 * np.dot(X1, X2.T)
         return self.sigma_f**2 * np.exp(-0.5 / self.l**2 * sqdist)
 
     def predict(self, X_s):
         """
-        predicts the mean and standard deviation of
+        Predicts the mean and standard deviation of
         points in a Gaussian process
 
-        X_s: numpy.ndarray of shape (s, 1) containing all of the points
-            - whose mean and standard deviation should be calculated
-            - s is the number of sample points
-        Return mu, sigma
-        - mu:
-        numpy.ndarray (s,) containing the mean for each point in X_s
-        """
+        Parameters:
+        - X_s: numpy.ndarray of shape (s, 1), sample points
 
+        Returns:
+        - mu: numpy.ndarray of shape (s,), mean at each sample point
+        - sigma: numpy.ndarray of shape (s,), variance at each point
+        """
         K_inv = np.linalg.inv(self.K)
         K_s = self.kernel(self.X, X_s)
         mu = K_s.T.dot(K_inv).dot(self.Y).reshape(-1)
@@ -54,10 +64,12 @@ class GaussianProcess:
 
     def update(self, X_new, Y_new):
         """
-        A function that updates a Gaussian process
-        """
+        Updates the Gaussian process with new data points
 
+        Parameters:
+        - X_new: numpy.ndarray of shape (1, 1), new input point
+        - Y_new: numpy.ndarray of shape (1, 1), new output point
+        """
         self.X = np.append(self.X, X_new).reshape(-1, 1)
         self.Y = np.append(self.Y, Y_new).reshape(-1, 1)
         self.K = self.kernel(self.X, self.X)
-        
