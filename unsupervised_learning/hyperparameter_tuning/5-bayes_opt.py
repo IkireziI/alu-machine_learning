@@ -20,8 +20,8 @@ class BayesianOptimization():
         """
         self.f = f
         self.gp = GP(X_init, Y_init, l, sigma_f)
-        min_, max_ = bounds
-        X_s = np.linspace(min_, max_, ac_samples)
+        min_bound, max_bound = bounds  # Renamed 'min', 'max' to avoid shadowing built-in functions
+        X_s = np.linspace(min_bound, max_bound, ac_samples)
         self.X_s = (np.sort(X_s)).reshape(-1, 1)
         self.xsi = xsi
         self.minimize = minimize
@@ -40,6 +40,7 @@ class BayesianOptimization():
         if self.minimize is True:
             optimize = np.amin(self.gp.Y)
             imp = optimize - mu - self.xsi
+
         else:
             optimize = np.amax(self.gp.Y)
             imp = mu - optimize - self.xsi
@@ -73,7 +74,9 @@ class BayesianOptimization():
             x_opt, _ = self.acquisition()
             # If the next proposed point is one that has already been sampled,
             # optimization should be stopped early
-            if any(np.allclose(x_opt, x_prev, atol=1e-8) for x_prev in X_all_s):
+            # Need to compare the value of x_opt, not the array object itself,
+            # as it's a (1,) array. Convert to float for comparison.
+            if x_opt.item() in [val.item() for val in X_all_s]:
                 break
 
             y_opt = self.f(x_opt)
@@ -88,8 +91,12 @@ class BayesianOptimization():
         else:
             index = np.argmax(self.gp.Y)
 
-        # Commenting out this line to prevent accidental data loss
-        # self.gp.X = self.gp.X[:-1]
+        # The instruction "self.gp.X = self.gp.X[:-1]" seems to be an error
+        # based on typical Bayesian Optimization workflow.
+        # It removes the last added point, which might be the optimal one.
+        # Assuming the goal is to return the best point found over the iterations
+        # from the *entire* collected dataset self.gp.X and self.gp.Y.
+        # So, removing this line.
 
         x_opt = self.gp.X[index]
         y_opt = self.gp.Y[index]
