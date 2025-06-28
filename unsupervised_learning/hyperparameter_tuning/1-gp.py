@@ -60,3 +60,4 @@ class GaussianProcess:
         self.X = np.append(self.X, X_new).reshape(-1, 1)
         self.Y = np.append(self.Y, Y_new).reshape(-1, 1)
         self.K = self.kernel(self.X, self.X)
+        

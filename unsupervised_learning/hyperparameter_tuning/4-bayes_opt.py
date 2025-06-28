@@ -63,3 +63,4 @@ class BayesianOptimization:
         X_next = self.X_s[np.argmax(EI)]
 
         return X_next, np.array(EI)
+    

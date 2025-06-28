@@ -85,3 +85,4 @@ class BayesianOptimization:
         X_opt = self.gp.X[idx]
         Y_opt = np.array(self.gp.Y[idx])
         return X_opt, Y_opt
+    
