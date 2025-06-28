@@ -103,7 +103,8 @@ class BayesianOptimization():
         X_all_s_values = []
 
         for i in range(iterations):
-            # Find the next sampling point by optimizing the acquisition function
+            # Find the next sampling point by optimizing the acquisition
+            # function.
             x_opt_proposed, _ = self.acquisition()
 
             # Convert proposed x_opt (numpy array) to scalar for correct
