@@ -18,3 +18,4 @@ if __name__ == '__main__':
     mu, sig = gp.predict(X_s)
     print(mu.shape, mu)
     print(sig.shape, sig)
+    

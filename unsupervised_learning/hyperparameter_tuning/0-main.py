@@ -20,3 +20,4 @@ if __name__ == '__main__':
     print(gp.sigma_f)
     print(gp.K.shape, gp.K)
     print(np.allclose(gp.kernel(X_init, X_init), gp.K))
+    

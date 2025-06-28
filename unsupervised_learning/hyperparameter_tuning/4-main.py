@@ -24,3 +24,4 @@ if __name__ == '__main__':
     plt.plot(bo.X_s.reshape(-1), EI.reshape(-1), color='r')
     plt.axvline(x=X_next)
     plt.show()
+    

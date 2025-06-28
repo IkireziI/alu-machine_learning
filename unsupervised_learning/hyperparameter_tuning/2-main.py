@@ -22,3 +22,4 @@ if __name__ == '__main__':
     print(gp.X.shape, gp.X)
     print(gp.Y.shape, gp.Y)
     print(gp.K.shape, gp.K)
+    

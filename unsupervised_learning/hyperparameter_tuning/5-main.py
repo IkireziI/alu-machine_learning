@@ -19,3 +19,4 @@ if __name__ == '__main__':
     print('Optimal X:', X_opt)
     print('Optimal Y:', Y_opt)
     print('All sample inputs:', bo.gp.X)
+    

@@ -25,3 +25,4 @@ if __name__ == '__main__':
     print(bo.X_s.shape, bo.X_s)
     print(bo.xsi)
     print(bo.minimize)
+    
