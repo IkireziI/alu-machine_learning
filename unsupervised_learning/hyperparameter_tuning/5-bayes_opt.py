@@ -23,8 +23,8 @@ class BayesianOptimization():
             X_init (np.ndarray): Initial sample points (shape (t, 1)).
             Y_init (np.ndarray): Initial corresponding values (shape (t, 1)).
             bounds (tuple): Tuple (min, max) defining the search space.
-            ac_samples (int): Number of samples to use for acquisition function
-                              optimization.
+            ac_samples (int): Number of samples to use for acquisition
+                              function optimization.
             l (float, optional): Length parameter for the RBF kernel.
                                  Defaults to 1.
             sigma_f (float, optional): Variance parameter for the RBF kernel.
@@ -98,21 +98,23 @@ class BayesianOptimization():
                 y_opt (np.ndarray): The value of the function at the optimal
                                     sample point.
         """
-        # Store scalar values of sampled points to check for duplicates correctly
+        # Store scalar values of sampled points to check for duplicates
+        # correctly.
         X_all_s_values = []
 
         for i in range(iterations):
             # Find the next sampling point by optimizing the acquisition function
             x_opt_proposed, _ = self.acquisition()
 
-            # Convert proposed x_opt (numpy array) to scalar for correct comparison
+            # Convert proposed x_opt (numpy array) to scalar for correct
+            # comparison.
             x_opt_scalar = x_opt_proposed.item()
 
             # If the next proposed point is one that has already been sampled,
-            # stop early
+            # stop early.
             if x_opt_scalar in X_all_s_values:
                 # If we break, the last proposed point was a duplicate and was
-                # not added to GP
+                # not added to GP.
                 break
 
             # Evaluate the black-box function at the new sample point
@@ -124,7 +126,7 @@ class BayesianOptimization():
             X_all_s_values.append(x_opt_scalar)
 
         # After iterations (or early stopping), find the best point from ALL
-        # collected samples
+        # collected samples.
         if self.minimize is True:
             index = np.argmin(self.gp.Y)
         else:
