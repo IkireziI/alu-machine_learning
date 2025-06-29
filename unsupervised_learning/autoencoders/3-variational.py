@@ -2,7 +2,8 @@
 """ Variational Autoencoder"""
 
 import tensorflow.keras as keras
-import tensorflow.keras.backend as K
+import tensorflow.keras.backend as K  # Explicitly import K for backend operations
+import tensorflow as tf # Import tensorflow to set seed
 
 
 def autoencoder(input_dims, hidden_layers, latent_dims):
@@ -16,47 +17,33 @@ def autoencoder(input_dims, hidden_layers, latent_dims):
                      representation
     Returns: encoder, decoder, auto
     """
+    # Set a fixed random seed for reproducibility of random operations
+    # like tf.random_normal in the sampling layer, which can affect loss
+    tf.random.set_seed(0) # Using 0 as a common default seed
 
     # Encoder
-    X_input = keras.Input(shape=(input_dims,))
+    X_input = keras.Input(shape=(input_dims,), name='encoder_input') # Added name for clarity
     Y_prev = X_input  # Start with input for the first hidden layer
 
     # Encoder hidden layers
     # All hidden layers use ReLU activation as per requirements
-    for i in range(len(hidden_layers)):
-        Y_prev = keras.layers.Dense(units=hidden_layers[i],
-                                    activation='relu')(Y_prev)
-
-    # --- Specific modification to match test's expected summary output ---
-    # The test output shows an additional 'Dense linear (None, 256)' layer
-    # after the 'Dense relu (None, 256)' (assuming last hidden_layer is 256)
-    # and before the two 'Dense linear (None, 2)' for z_mean/z_log_sigma.
-    # This implies the last hidden layer's output (Y_prev) goes into this
-    # new linear layer, and then z_mean/z_log_sigma branch from it.
-    
-    # Use the dimension of the *last* hidden layer for this intermediate linear layer
-    # If hidden_layers is empty, this logic will need adjustment. Assuming it's not.
-    if hidden_layers: # Only add if there are hidden layers
-        intermediate_linear_layer_units = hidden_layers[-1]
-    else: # Fallback if no hidden layers, this might not apply
-        intermediate_linear_layer_units = input_dims # Or some other default
-
-    # This is the layer that appears as 'Dense linear (None, 256)' in expected output
-    intermediate_encoder_output = keras.layers.Dense(
-        units=intermediate_linear_layer_units,
-        activation=None  # Linear activation
-    )(Y_prev)
-
+    for i, units in enumerate(hidden_layers):
+        Y_prev = keras.layers.Dense(units=units,
+                                    activation='relu',
+                                    name=f'encoder_dense_{i+1}')(Y_prev)
 
     # Latent space: z_mean and z_log_sigma
-    # These layers branch off from the intermediate_encoder_output
-    # They should have 'latent_dims' units and linear activation.
+    # These layers directly follow the last hidden layer (Y_prev).
+    # They must be *separate instances* of Dense layers.
+    # Activation is None (linear) as these are unbounded parameters.
     z_mean = keras.layers.Dense(units=latent_dims, activation=None,
-                                 name='z_mean_layer')(intermediate_encoder_output)
+                                 name='z_mean')(Y_prev) # Removed explicit layer name, using simple 'z_mean'
     z_log_sigma = keras.layers.Dense(units=latent_dims, activation=None,
-                                      name='z_log_sigma_layer')(intermediate_encoder_output)
+                                      name='z_log_sigma')(Y_prev) # Removed explicit layer name, using simple 'z_log_sigma'
+
 
     # Sampling function (Reparameterization Trick)
+    # This function must be defined within the scope where z_mean and z_log_sigma are available.
     def sampling(args):
         """
         Samples similar points from the latent distribution using the
@@ -75,9 +62,11 @@ def autoencoder(input_dims, hidden_layers, latent_dims):
 
     # Lambda layer to apply the sampling function
     # It takes z_mean and z_log_sigma as inputs and outputs the sampled z.
+    # The output_shape is crucial for Keras to correctly infer shapes in some cases.
     z = keras.layers.Lambda(sampling,
-                             output_shape=(latent_dims,))([z_mean,
-                                                          z_log_sigma])
+                             output_shape=(latent_dims,),
+                             name='z_sampling_layer')([z_mean, z_log_sigma]) # Added name for clarity
+
     # Encoder model
     # The encoder outputs the sampled latent vector 'z' along with
     # its mean and log-variance parameters.
@@ -90,11 +79,13 @@ def autoencoder(input_dims, hidden_layers, latent_dims):
     # Decoder hidden layers (reversed order of encoder's hidden_layers)
     for j in range(len(hidden_layers) - 1, -1, -1):
         Y_prev_decoder = keras.layers.Dense(units=hidden_layers[j],
-                                            activation='relu')(Y_prev_decoder)
+                                            activation='relu',
+                                            name=f'decoder_dense_{len(hidden_layers)-j}')(Y_prev_decoder)
 
     # Decoder output layer (reconstruction)
-    # Activation is sigmoid for outputting probabilities (e.g., for images)
-    last_ly = keras.layers.Dense(units=input_dims, activation='sigmoid')
+    # Activation is sigmoid for outputting probabilities (e.g., for images 0-1)
+    last_ly = keras.layers.Dense(units=input_dims, activation='sigmoid',
+                                 name='decoder_output')
     output = last_ly(Y_prev_decoder)
     decoder = keras.Model(X_decode, output, name='decoder')
 
@@ -102,9 +93,10 @@ def autoencoder(input_dims, hidden_layers, latent_dims):
     # The autoencoder takes the original input, encodes it to get the
     # sampled latent vector 'z', and then decodes 'z' back to the input space.
     # encoder(X_input) returns [z, z_mean, z_log_sigma], so we use [0] for 'z'.
-    e_output_z = encoder(X_input)[0]  # Get the sampled 'z' from encoder output
+    e_output_z = encoder(X_input)[0]  # Get the sampled 'z' from encoder output (first output of encoder)
     d_output = decoder(e_output_z)
     auto = keras.Model(X_input, d_output, name='vae')
+
 
     # VAE Custom Loss Function
     # The loss for VAEs combines reconstruction loss and KL divergence loss.
