@@ -31,7 +31,11 @@ def autoencoder(input_dims, hidden_layers, latent_dims):
         epsilon = keras.backend.random_normal(shape=(batch, dim))
         return z_m + keras.backend.exp(z_stand_des / 2) * epsilon
 
-    z = keras.layers.Lambda(sampling, output_shape=(latent_dims,))([z_mean, z_log_sigma])
+    z = keras.layers.Lambda(
+        sampling,
+        output_shape=(latent_dims,)
+    )([z_mean, z_log_sigma])
+
     encoder = keras.Model(X_input, [z, z_mean, z_log_sigma])
 
     # Decoder
@@ -53,7 +57,8 @@ def autoencoder(input_dims, hidden_layers, latent_dims):
         x_loss = keras.backend.sum(x_loss, axis=1)
 
         kl_loss = -0.5 * keras.backend.sum(
-            1 + z_log_sigma - keras.backend.square(z_mean) - keras.backend.exp(z_log_sigma),
+            1 + z_log_sigma - keras.backend.square(z_mean) -
+            keras.backend.exp(z_log_sigma),
             axis=1
         )
         return x_loss + kl_loss
